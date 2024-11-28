@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Azaka</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+    #azaka {
+       height: 50px;
+    }
+
+    body {
+      background: linear-gradient(135deg, #191a33, #191a33);
+      color: white;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    header {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100vh;
+      padding: 0 50px;
+    }
+
+    .content {
+      max-width: 50%;
+    }
+
+    .content h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .content p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      color: #e0e0e0;
+    }
+
+    .content .download-btns a {
+      display: inline-block;
+      margin-right: 10px;
+      padding: 15px 30px;
+      font-size: 1rem;
+      background: green;
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .content .download-btns a:hover {
+      background: #444;
+      transform: scale(1.05);
+    }
+
+    .phones {
+      position: relative;
+    }
+
+    .phones img {
+      max-width: 400px;
+      transform: rotate(-10deg);
+      transition: transform 0.3s ease;
+    }
+
+    .phones img:hover {
+      transform: rotate(0deg);
+    }
+
+    .social-links {
+      position: absolute;
+      bottom: 20px;
+      left: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .social-links a {
+      color: white;
+      font-size: 1.5rem;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+    #main{
+      height: 60px;
+    }
+
+    .social-links a:hover {
+      transform: scale(1.2);
+    }
+    .live-streaming {
+      position: absolute;
+      bottom: 50px;
+      left: 30px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .live-indicator {
+      position: relative;
+      width: 15px;
+      height: 15px;
+      background-color: red;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    .live-indicator::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      width: 25px;
+      height: 25px;
+      border: 2px solid rgba(255, 0, 0, 0.5);
+      border-radius: 50%;
+      animation: ring 1.5s infinite;
+    }
+
+    .live-text {
+      font-size: 1.2rem;
+      font-weight: light;
+      text-transform: uppercase;
+    }
+
+    .phone-image {
+    position: fixed; /* Toujours visible en bas */
+    bottom: 0; /* Fixé au bas de la fenêtre */
+    left: 70%; /* Centré horizontalement */
+    transform: translateX(-50%); /* Ajustement pour centrer parfaitement */
+    width: 100%;
+    max-width: 600px;
+    z-index: 10; /* S'assure que l'image est au-dessus des autres éléments */
+  }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+      }
+    }
+
+    @keyframes ring {
+      0% {
+        transform: scale(1);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .content{
+        max-width: 100%;
+      }
+      .content h1 {
+        font-size: 2rem;
+      }
+
+      .content p {
+        font-size: 1rem;
+      }
+
+      .content .download-btns a {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+
+      .phone-image {
+        max-width: 600px;
+      }
+    }
+    /* Bouton de lancement */
+.video-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #fc466b;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.video-btn:hover {
+  background-color: #3f5efb;
+}
+
+/* Popup vidéo */
+.video-popup {
+  display: none; /* Masquer par défaut */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Contenu de la popup */
+.video-popup-content {
+  position: relative;
+  width: 80%;
+  max-width: 800px;
+}
+
+iframe {
+  width: 100%;
+  height: 450px;
+  border: none;
+}
+
+/* Bouton de fermeture */
+.close-btn {
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  font-size: 30px;
+  color: #fff;
+  cursor: pointer;
+}
+
+    /* Conteneur d'animation */
+.background-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Derrière le contenu */
+  overflow: hidden;
+  /* background: linear-gradient(135deg, #fc466b, #3f5efb); */
+}
+
+/* Chaque emoji animé */
+.live-emoji {
+  position: absolute;
+  font-size: 20px; /* Taille initiale des emojis */
+  animation: float 5s linear infinite;
+  pointer-events: none; /* Empêche les interactions */
+  transform: rotate(0deg); /* Ajouter une rotation de base */
+}
+
+/* Animation de montée des emojis */
+@keyframes float {
+  0% {
+    transform: translateY(100vh) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10vh) translateX(calc(10vw - 20px)) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+
+
+
+  </style>
+</head>
+<body>
+  <div class="background-animation"></div>
+  <header><img id="azaka" src="azaka.png"/></header>
+  <div class="container">
+    <!-- Text Content -->
+    <div class="content">
+      <h1 id="live-text">Azaka : Découvrir, Créer, Inspirer</h1>
+      <p id="text">Vivez des événements en direct comme jamais ! Profitez
+         de salles privées et d’une intégration fluide avec MonCash pour des paiements rapides et sécurisés. <br>
+        📲 Disponible sur iOS et Android. Rejoignez-nous dès maintenant !</p>
+      <div class="download-btns">
+        <a href="#">Télécharger Azaka pour Android</a>
+      </div>
+      <!-- <div>
+        <p>Découvrez toutes les fonctionnalités en vidéo !</p>
+        <button class="video-btn" onclick="openVideo()">Voir la vidéo</button>
+      </div> -->
+      
+      <!-- Popup de vidéo -->
+      <div id="video-popup" class="video-popup">
+        <div class="video-popup-content">
+          <span class="close-btn" onclick="closeVideo()">×</span>
+          <iframe
+            id="video-frame"
+            src=""
+            frameborder="0"
+            allow="autoplay; encrypted-media"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+      
+    </div>
+    <!-- Phone Images -->
+    <!-- <div class="phones">
+      <img src="mmain.png" id="main" alt="Azaka">
+    </div> -->
+    <div >
+      <img src="main.png" class="phone-image" alt="Azaka">
+    </div>
+    <div class="live-streaming" onclick="openVideo()" >
+      <div class="live-indicator"></div>
+      <div class="live-text">Démo </div>
+    </div>
+  </div>
+  <script>
+    const animationContainer = document.querySelector('.background-animation');
+
+
+  // Liste des emojis à utiliser
+  const emojis = ['👨🏾‍🦳', '😍', '🎶', '📡', '✨', '🎤'];
+
+  function createLiveEmoji() {
+    const emoji = document.createElement('div');
+    emoji.classList.add('live-emoji');
+    
+    // Ajouter un emoji aléatoire
+    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    
+    // Taille aléatoire
+    const size = Math.random() * 30 + 20 + 'px'; // Taille entre 20px et 50px
+    emoji.style.fontSize = size;
+
+    // Position horizontale aléatoire
+    emoji.style.left = Math.random() * 100 + 'vw';
+
+    // Durée d'animation aléatoire
+    const duration = Math.random() * 5 + 5 + 's';
+    emoji.style.animationDuration = duration;
+    // Ajouter une couleur aléatoire pour chaque emoji
+    emoji.style.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+
+
+    animationContainer.appendChild(emoji);
+
+    // Supprimer l'emoji après l'animation
+    setTimeout(() => {
+      emoji.remove();
+    }, parseFloat(duration) * 1000);
+  }
+
+  // Générer des emojis toutes les 500ms
+  setInterval(createLiveEmoji, 1000);
+
+  function openVideo() {
+  const videoPopup = document.getElementById('video-popup');
+  const videoFrame = document.getElementById('video-frame');
+
+  // Ajouter l'URL de la vidéo ici
+  videoFrame.src = 'https://www.youtube.com/embed/xTGsmH36fEo?si=n3iAS3gNGzgqIBny';
+  videoPopup.style.display = 'flex'; // Afficher la popup
+}
+
+function closeVideo() {
+  const videoPopup = document.getElementById('video-popup');
+  const videoFrame = document.getElementById('video-frame');
+
+  videoFrame.src = ''; // Arrêter la vidéo
+  videoPopup.style.display = 'none'; // Masquer la popup
+}
+
+
+  </script>
+  
+  
+</body>
+</html>
